@@ -1,8 +1,10 @@
 # RASPBERRY-INTERNET-MONITOR
 
-
+Docker compose for Prometheus + Grafana + Blackbox + Alertmanager
 
 ### Should support:
 
-- [ ] Prometheus service running on docker container
-- [ ] Grafana service running on docker container
+- [X] Prometheus service running on docker container
+- [X] Configure Blackbox Exporter on Prometheus
+- [X] Grafana service running on docker container
+- [X] Configure AlertManager

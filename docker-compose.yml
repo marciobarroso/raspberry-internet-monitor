@@ -1,7 +1,7 @@
-version: '3'
+version: "3"
 
 networks:
-  internet_monitoring: {}
+  monitoring: {}
 
 volumes:
   prometheus_data: {}
@@ -9,30 +9,50 @@ volumes:
 
 services:
   prometheus:
-    image: prom/prometheus:latest
+    image: quay.io/prometheus/prometheus:latest
     container_name: prometheus
     restart: unless-stopped
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
-      - "--web.console.libraries=/etc/prometheus/console_libraries"
-      - "--web.console.templates=/etc/prometheus/consoles"
-      - "--web.enable-lifecycle"
-      - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention=200h"
     networks:
-      - internet_monitoring
+      - monitoring
     volumes:
       - prometheus_data:/prometheus
-      - ./configuration/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
       - 9090:9090
+
+  blackbox:
+    image: quay.io/prometheus/blackbox-exporter:latest
+    container_name: blackbox
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/blackbox.yml"
+    networks:
+      - monitoring
+    volumes:
+      - ./config/blackbox/blackbox.yml:/etc/blackbox.yml
+    ports:
+      - 9115:9115
+
+  alertmanager:
+    image: quay.io/prometheus/alertmanager:latest
+    container_name: alertmanager
+    restart: unless-stopped
+    command:
+      - "--config.file=/etc/alertmanager/alertmanager.yml"
+      - "--storage.path=/alertmanager"
+    networks:
+      - monitoring
+    volumes:
+      - ./config/alertmanager/alertmanager.yml:/etc/alertmanager.yml
 
   grafana:
     image: grafana/grafana-oss:latest
     container_name: grafana
     restart: unless-stopped
     networks:
-      - internet_monitoring
+      - monitoring
     volumes:
       - grafana_data:/var/lib/grafana
     ports:

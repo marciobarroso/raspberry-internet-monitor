@@ -1,0 +1,13 @@
+route:
+  receiver: "default"
+
+receivers:
+  - name: "default"
+    email_configs:
+      - to: xxxxx@gmail.com
+        from: xxxxx@gmail.com
+        smarthost: smtp.gmail.com:587
+        auth_username: xxxxx@gmail.com
+        auth_identity: xxxxx@gmail.com
+        auth_password: xxxxx
+        send_resolved: true

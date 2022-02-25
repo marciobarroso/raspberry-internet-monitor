@@ -1,0 +1,12 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 15s
+    http:
+      preferred_ip_protocol: ip4
+  http_2xx_with_header:
+    prober: http
+    timeout: 15s
+    http:
+      headers:
+        Authorization: Bearer xxxxxxxxx
